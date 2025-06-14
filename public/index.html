@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>गामाकौआ - भारतीय संस्कृति और साहित्य की खोज</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="particles" class="particles"></div>
+
+    <div
+      id="messageContainer"
+      class="fixed top-20 right-5 z-[1001] w-80"
+    ></div>
+
+    <header class="fixed top-0 left-0 w-full z-50 py-4 shadow-lg">
+      <nav
+        class="container mx-auto flex justify-between items-center px-4 md:px-8"
+      >
+        <div class="logo-container">
+          <img
+            src="https://placehold.co/50x50/3B82F6/FFFFFF/png?text=GK"
+            alt="गामाकौआ Logo"
+            class="logo-img"
+          />
+          <a href="index.html" class="logo-text">गामाकौआ</a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-6">
+          <a
+            href="index.html"
+            class="text-white hover:text-emerald-300 transition duration-300"
+          >
+            <i class="fas fa-home mr-2"></i>होम
+          </a>
+          <div class="relative group">
+            <button
+              class="text-white hover:text-emerald-300 transition duration-300 focus:outline-none"
+            >
+              <i class="fas fa-bars mr-2"></i>श्रेणियाँ
+              <i class="fas fa-chevron-down ml-1 text-xs"></i>
+            </button>
+            <div
+              class="absolute left-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-10"
+            >
+              <a
+                href="hindi-literature.html"
+                class="block px-4 py-2 text-white hover:bg-gray-700"
+                ><i class="fas fa-book mr-2"></i>हिंदी साहित्य</a
+              >
+              <a
+                href="literary-theories.html"
+                class="block px-4 py-2 text-white hover:bg-gray-700"
+                ><i class="fas fa-scroll mr-2"></i>साहित्यिक सिद्धांत</a
+              >
+              <a
+                href="story-reviews.html"
+                class="block px-4 py-2 text-white hover:bg-gray-700"
+                ><i class="fas fa-pen-nib mr-2"></i>कहानी समीक्षाएं</a
+              >
+              <a
+                href="du-study-material.html"
+                class="block px-4 py-2 text-white hover:bg-gray-700"
+                ><i class="fas fa-university mr-2"></i>डीयू अध्ययन सामग्री</a
+              >
+            </div>
+          </div>
+          <a
+            href="#contactUs"
+            id="contactUsLink"
+            class="text-white hover:text-emerald-300 transition duration-300"
+          >
+            <i class="fas fa-envelope mr-2"></i>संपर्क करें
+          </a>
+          <button
+            id="postContentLink"
+            class="bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 transition duration-300 flex items-center hidden"
+          >
+            <i class="fas fa-plus-circle mr-2"></i>सामग्री पोस्ट करें
+          </button>
+          <div id="authButtons" class="flex space-x-4">
+            <button
+              id="loginBtn"
+              class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300"
+            >
+              लॉग इन
+            </button>
+            <button
+              id="signupBtn"
+              class="bg-gray-600 text-white px-4 py-2 rounded-full hover:bg-gray-700 transition duration-300"
+            >
+              साइन अप
+            </button>
+          </div>
+          <div id="userProfileDropdown" class="relative group hidden">
+            <button
+              class="flex items-center text-white focus:outline-none bg-gray-700 px-4 py-2 rounded-full hover:bg-gray-600 transition duration-300"
+            >
+              <i class="fas fa-user-circle text-xl mr-2"></i>
+              <span id="userEmailDisplay"></span>
+              <i class="fas fa-chevron-down ml-2 text-xs"></i>
+            </button>
+            <div
+              class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-10"
+            >
+              <a
+                href="#"
+                id="logoutBtn"
+                class="block px-4 py-2 text-white hover:bg-gray-700"
+                ><i class="fas fa-sign-out-alt mr-2"></i>लॉग आउट</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="md:hidden flex items-center">
+          <button id="mobileMenuButton" class="text-white focus:outline-none">
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </nav>
+
+      <div id="mobileMenu" class="hidden md:hidden py-4 border-t border-gray-700">
+        <div class="flex flex-col space-y-4 px-4">
+          <a
+            href="hindi-literature.html"
+            class="text-white hover:text-emerald-300 transition duration-300"
+          >
+            <i class="fas fa-book mr-2"></i>हिंदी साहित्य
+          </a>
+          <a
+            href="literary-theories.html"
+            class="text-white hover:text-emerald-300 transition duration-300"
+          >
+            <i class="fas fa-scroll mr-2"></i>साहित्यिक सिद्धांत
+          </a>
+          <a
+            href="story-reviews.html"
+            class="text-white hover:text-emerald-300 transition duration-300"
+          >
+            <i class="fas fa-pen-nib mr-2"></i>कहानी समीक्षाएं
+          </a>
+          <a
+            href="du-study-material.html"
+            class="text-white hover:text-emerald-300 transition duration-300"
+          >
+            <i class="fas fa-university mr-2"></i>डीयू अध्ययन सामग्री
+          </a>
+          <a
+            href="#contactUs"
+            id="mobileContactUsLink"
+            class="text-white hover:text-emerald-300 transition duration-300"
+          >
+            <i class="fas fa-envelope mr-2"></i>संपर्क करें
+          </a>
+          <button
+            id="mobilePostContentLink"
+            class="bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 transition duration-300 flex items-center justify-center w-full hidden"
+          >
+            <i class="fas fa-plus-circle mr-2"></i>सामग्री पोस्ट करें
+          </button>
+          <div id="mobileAuthButtons" class="flex flex-col space-y-3">
+            <button
+              id="mobileLoginBtn"
+              class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 w-full"
+            >
+              लॉग इन
+            </button>
+            <button
+              id="mobileSignupBtn"
+              class="bg-gray-600 text-white px-4 py-2 rounded-full hover:bg-gray-700 transition duration-300 w-full"
+            >
+              साइन अप
+            </button>
+          </div>
+          <div id="mobileUserProfileDropdown" class="relative group hidden">
+            <button
+              class="flex items-center text-white focus:outline-none bg-gray-700 px-4 py-2 rounded-full hover:bg-gray-600 transition duration-300 w-full justify-center"
+            >
+              <i class="fas fa-user-circle text-xl mr-2"></i>
+              <span id="mobileUserEmailDisplay"></span>
+              <i class="fas fa-chevron-down ml-2 text-xs"></i>
+            </button>
+            <div
+              class="mt-2 w-full bg-gray-800 rounded-md shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-10"
+            >
+              <a
+                href="#"
+                id="mobileLogoutBtn"
+                class="block px-4 py-2 text-white hover:bg-gray-700 text-center"
+                ><i class="fas fa-sign-out-alt mr-2"></i>लॉग आउट</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section
+        class="hero-section text-white text-center flex items-center justify-center relative"
+      >
+        <div class="relative z-10 p-8">
+          <h1
+            class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 animate__animated animate__fadeInDown"
+          >
+            भारतीय संस्कृति और साहित्य की खोज में
+            <span class="gradient-text">गामाकौआ</span> आपका साथी
+          </h1>
+          <p
+            class="text-lg md:text-xl mb-8 max-w-2xl mx-auto animate__animated animate__fadeInUp"
+          >
+            हिंदी साहित्य, साहित्यिक सिद्धांतों, कहानी समीक्षाओं और डीयू अध्ययन
+            सामग्री के लिए आपका वन-स्टॉप गंतव्य।
+          </p>
+          <div class="animate__animated animate__fadeInUp animate__delay-1s">
+            <a
+              href="#featured-articles"
+              class="bg-emerald-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-emerald-600 transition duration-300 shadow-lg inline-block mr-4"
+              >अन्वेषण करें</a
+            >
+            <a
+              href="#contactUs"
+              id="heroContactUsLink"
+              class="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg inline-block"
+              >हमसे जुड़ें</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="py-12 bg-gray-800 bg-opacity-80 relative z-10">
+        <div class="container mx-auto px-4 md:px-8 text-center">
+          <h2 class="text-3xl font-bold gradient-text mb-6">लेख खोजें</h2>
+          <div class="max-w-xl mx-auto flex">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="खोजें..."
+              class="w-full p-3 rounded-l-full border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+            <button
+              id="searchButton"
+              class="bg-emerald-500 text-white px-6 py-3 rounded-r-full hover:bg-emerald-600 transition duration-300"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="featured-articles" class="py-16 bg-gray-900 bg-opacity-70">
+        <div class="container mx-auto px-4 md:px-8">
+          <h2 class="text-4xl font-bold gradient-text text-center mb-10">
+            विशेष लेख
+          </h2>
+          <div
+            id="articlesContainer"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            </div>
+          <div
+            id="loadingSpinner"
+            class="loader my-8"
+            style="display: none"
+          ></div>
+          <p
+            id="noArticlesMessage"
+            class="text-center text-gray-400 text-lg hidden"
+          >
+            कोई लेख नहीं मिला। कृपया बाद में पुनः प्रयास करें।
+          </p>
+        </div>
+      </section>
+
+      <section class="py-16 bg-gray-800 bg-opacity-80">
+        <div class="container mx-auto px-4 md:px-8">
+          <h2 class="text-4xl font-bold gradient-text text-center mb-10">
+            हमारी श्रेणियां
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <a
+              href="hindi-literature.html"
+              class="content-overlay p-6 text-center hover:shadow-xl flex flex-col items-center justify-center"
+            >
+              <i
+                class="fas fa-book text-5xl mb-4 gradient-text animate__animated animate__pulse animate__infinite"
+              ></i>
+              <h3 class="text-2xl font-semibold mb-2">हिंदी साहित्य</h3>
+              <p class="text-gray-600">
+                भारतीय साहित्य की समृद्ध विरासत की खोज करें।
+              </p>
+            </a>
+            <a
+              href="literary-theories.html"
+              class="content-overlay p-6 text-center hover:shadow-xl flex flex-col items-center justify-center"
+            >
+              <i
+                class="fas fa-scroll text-5xl mb-4 gradient-text animate__animated animate__pulse animate__infinite animate__delay-1s"
+              ></i>
+              <h3 class="text-2xl font-semibold mb-2">साहित्यिक सिद्धांत</h3>
+              <p class="text-gray-600">
+                प्रमुख साहित्यिक सिद्धांतों और आलोचनात्मक दृष्टिकोणों को समझें।
+              </p>
+            </a>
+            <a
+              href="story-reviews.html"
+              class="content-overlay p-6 text-center hover:shadow-xl flex flex-col items-center justify-center"
+            >
+              <i
+                class="fas fa-pen-nib text-5xl mb-4 gradient-text animate__animated animate__pulse animate__infinite animate__delay-2s"
+              ></i>
+              <h3 class="text-2xl font-semibold mb-2">कहानी समीक्षाएं</h3>
+              <p class="text-gray-600">
+                नवीनतम कहानियों और क्लासिक्स की गहन समीक्षाएं पढ़ें।
+              </p>
+            </a>
+            <a
+              href="du-study-material.html"
+              class="content-overlay p-6 text-center hover:shadow-xl flex flex-col items-center justify-center"
+            >
+              <i
+                class="fas fa-university text-5xl mb-4 gradient-text animate__animated animate__pulse animate__infinite animate__delay-3s"
+              ></i>
+              <h3 class="text-2xl font-semibold mb-2">डीयू अध्ययन सामग्री</h3>
+              <p class="text-gray-600">
+                दिल्ली विश्वविद्यालय के छात्रों के लिए विशेष अध्ययन सामग्री।
+              </p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 bg-gray-900 bg-opacity-70">
+        <div class="container mx-auto px-4 md:px-8">
+          <h2 class="text-4xl font-bold gradient-text text-center mb-10">
+            हमारे बारे में क्या कहते हैं
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div
+              class="bg-white bg-opacity-10 rounded-xl p-6 backdrop-filter backdrop-blur-sm border border-gray-700 hover:border-emerald-400 transition duration-500"
+            >
+              <div class="flex items-center mb-4">
+                <img
+                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  alt="User Avatar"
+                  class="w-12 h-12 rounded-full mr-4 border-2 border-emerald-400"
+                />
+                <div>
+                  <p class="text-lg font-semibold text-white">आनंद शर्मा</p>
+                  <p class="text-gray-400">साहित्य के छात्र</p>
+                </div>
+              </div>
+              <p class="text-gray-300 hindi-text">
+                "गामाकौआ ने मुझे हिंदी साहित्य के लिए एक नया दृष्टिकोण दिया
+                है। यहां की सामग्री बहुत गहन और ज्ञानवर्धक है।"
+              </p>
+            </div>
+            <div
+              class="bg-white bg-opacity-10 rounded-xl p-6 backdrop-filter backdrop-blur-sm border border-gray-700 hover:border-emerald-400 transition duration-500"
+            >
+              <div class="flex items-center mb-4">
+                <img
+                  src="https://randomuser.me/api/portraits/women/44.jpg"
+                  alt="User Avatar"
+                  class="w-12 h-12 rounded-full mr-4 border-2 border-emerald-400"
+                />
+                <div>
+                  <p class="text-lg font-semibold text-white">प्रिया सिंह</p>
+                  <p class="text-gray-400">शोधकर्ता</p>
+                </div>
+              </div>
+              <p class="text-gray-300 hindi-text">
+                "एक शोधकर्ता के रूप में, मुझे साहित्यिक सिद्धांतों पर यहाँ
+                मिलने वाली सामग्री बेहद उपयोगी लगती है। विशेष रूप से पश्चिमी
+                सिद्धांतों को हिंदी साहित्य के संदर्भ में समझाने का तरीका
+                बेहतरीन है।"
+              </p>
+            </div>
+          </div>
+          <div class="flex justify-center mt-10">
+            <div
+              class="bg-white bg-opacity-10 rounded-xl p-6 backdrop-filter backdrop-blur-sm border border-gray-700 inline-flex items-center"
+            >
+              <img
+                src="https://placehold.co/60x60/10B981/FFFFFF/png?text=Trusted"
+                alt="Trusted by 5000+ members"
+                class="rounded-full mr-4"
+              />
+              <div class="ml-4 text-left">
+                <p class="text-sm font-medium">5000+ सदस्यों द्वारा विश्वसनीय</p>
+                <div class="flex items-center">
+                  <div class="flex text-yellow-400">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </div>
+                  <span class="ml-2 text-sm">4.8/5.0 रेटिंग</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-12 bg-gray-900 bg-opacity-70">
+        <div class="container mx-auto px-4 md:px-8 text-center">
+          <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-6">
+            हमारे समुदाय में शामिल हों
+          </h2>
+          <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+            साहित्य और संस्कृति के प्रति उत्साही लोगों के हमारे बढ़ते समुदाय का
+            हिस्सा बनें। नवीनतम लेखों तक पहुंच प्राप्त करें, अपनी अंतर्दृष्टि
+            साझा करें, और साहित्यिक चर्चाओं में भाग लें।
+          </p>
+          <button
+            id="joinNowBtn"
+            class="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg"
+          >
+            अभी शामिल हों
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-gray-900 py-8 text-white text-center">
+      <div class="container mx-auto px-4 md:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center mb-6"
+        >
+          <div class="mb-4 md:mb-0">
+            <a href="index.html" class="logo-text text-2xl"
+              >गामाकौआ</a
+            >
+            <p class="text-gray-400 text-sm mt-2">
+              भारतीय संस्कृति और साहित्य की खोज
+            </p>
+          </div>
+          <div class="flex space-x-6">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              aria-label="Facebook"
+              class="text-gray-400 hover:text-white transition duration-300"
+              ><i class="fab fa-facebook-f text-xl"></i
+            ></a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              aria-label="Twitter"
+              class="text-gray-400 hover:text-white transition duration-300"
+              ><i class="fab fa-twitter text-xl"></i
+            ></a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              aria-label="Instagram"
+              class="text-gray-400 hover:text-white transition duration-300"
+              ><i class="fab fa-instagram text-xl"></i
+            ></a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              aria-label="LinkedIn"
+              class="text-gray-400 hover:text-white transition duration-300"
+              ><i class="fab fa-linkedin-in text-xl"></i
+            ></a>
+          </div>
+        </div>
+        <div class="border-t border-gray-700 pt-6 mt-6">
+          <p class="text-gray-500 text-sm">
+            &copy; 2025 गामाकौआ। सर्वाधिकार सुरक्षित।
+          </p>
+          <p class="text-gray-500 text-sm mt-1">
+            <a href="#" class="hover:text-white">गोपनीयता नीति</a> |
+            <a href="#" class="hover:text-white">सेवा की शर्तें</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <button
+      id="backToTopBtn"
+      class="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 transform scale-0 opacity-0 hover:bg-blue-700"
+    >
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <div id="loginModal" class="modal-overlay">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('loginModal')">
+          &times;
+        </button>
+        <h3 class="text-2xl font-bold mb-6 text-center">लॉग इन करें</h3>
+        <form id="loginForm">
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="ईमेल"
+            required
+            class="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="पासवर्ड"
+            required
+            class="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300"
+          >
+            लॉग इन
+          </button>
+        </form>
+        <p class="text-center text-gray-700 mt-4">
+          खाता नहीं है?
+          <a
+            href="#"
+            class="text-blue-600 hover:underline"
+            onclick="openModal('signupModal'); closeModal('loginModal'); return false;"
+            >साइन अप करें</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <div id="signupModal" class="modal-overlay">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('signupModal')">
+          &times;
+        </button>
+        <h3 class="text-2xl font-bold mb-6 text-center">साइन अप करें</h3>
+        <form id="signupForm">
+          <input
+            type="text"
+            id="signupUsername"
+            placeholder="उपयोगकर्ता नाम"
+            required
+            class="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="email"
+            id="signupEmail"
+            placeholder="ईमेल"
+            required
+            class="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            id="signupPassword"
+            placeholder="पासवर्ड"
+            required
+            class="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            class="w-full bg-emerald-600 text-white py-3 rounded-md hover:bg-emerald-700 transition duration-300"
+          >
+            साइन अप
+          </button>
+        </form>
+        <p class="text-center text-gray-700 mt-4">
+          पहले से ही एक खाता है?
+          <a
+            href="#"
+            class="text-blue-600 hover:underline"
+            onclick="openModal('loginModal'); closeModal('signupModal'); return false;"
+            >लॉग इन करें</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <div id="articleDetailModal" class="modal-overlay">
+      <div class="modal-content max-w-3xl w-11/12 mx-auto p-6 relative">
+        <button class="close-btn" onclick="closeModal('articleDetailModal')">
+          &times;
+        </button>
+        <h3 id="articleDetailTitle" class="text-3xl font-bold mb-4 text-gray-900">
+          Article Title
+        </h3>
+        <p class="text-sm text-gray-600 mb-2">
+          लेखक: <span id="articleDetailAuthor"></span> | श्रेणी:
+          <span id="articleDetailCategory"></span>
+        </p>
+        <img
+          id="articleDetailImage"
+          src=""
+          alt="Article Image"
+          class="w-full h-auto max-h-64 object-cover rounded-md mb-4"
+          style="display: none"
+        />
+        <div
+          id="articleDetailContent"
+          class="prose prose-lg max-w-none text-gray-800"
+        >
+          </div>
+      </div>
+    </div>
+
+    <div id="postContentModal" class="modal-overlay">
+      <div class="modal-content max-w-3xl w-11/12 mx-auto p-6 relative">
+        <button class="close-btn" onclick="closeModal('postContentModal')">
+          &times;
+        </button>
+        <h3 class="text-2xl font-bold mb-6 text-center text-gray-900">
+          नया लेख पोस्ट करें
+        </h3>
+        <form id="postArticleForm">
+          <div class="mb-4">
+            <label for="articleTitle" class="block text-gray-700 text-sm font-bold mb-2"
+              >शीर्षक:</label
+            >
+            <input
+              type="text"
+              id="articleTitle"
+              placeholder="लेख का शीर्षक दर्ज करें"
+              required
+              class="modal-content-input"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="articleCategory" class="block text-gray-700 text-sm font-bold mb-2"
+              >श्रेणी:</label
+            >
+            <select id="articleCategory" required class="modal-content-input">
+              <option value="">श्रेणी का चयन करें</option>
+              <option value="Hindi Literature">हिंदी साहित्य</option>
+              <option value="Literary Theories">साहित्यिक सिद्धांत</option>
+              <option value="Story Reviews">कहानी समीक्षाएं</option>
+              <option value="DU Study Material">डीयू अध्ययन सामग्री</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label for="articleImageUrl" class="block text-gray-700 text-sm font-bold mb-2"
+              >छवि यूआरएल (वैकल्पिक):</label
+            >
+            <input
+              type="text"
+              id="articleImageUrl"
+              placeholder="लेख के लिए छवि यूआरएल दर्ज करें"
+              class="modal-content-input"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="articleContent" class="block text-gray-700 text-sm font-bold mb-2"
+              >सामग्री:</label
+            >
+            <div class="editor-toolbar bg-gray-200 p-2 rounded-t-md">
+              <button type="button" class="editor-btn" data-command="bold">
+                <i class="fas fa-bold"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="italic">
+                <i class="fas fa-italic"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="underline">
+                <i class="fas fa-underline"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="insertOrderedList">
+                <i class="fas fa-list-ol"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="insertUnorderedList">
+                <i class="fas fa-list-ul"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="justifyLeft">
+                <i class="fas fa-align-left"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="justifyCenter">
+                <i class="fas fa-align-center"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="justifyRight">
+                <i class="fas fa-align-right"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="createLink">
+                <i class="fas fa-link"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="unlink">
+                <i class="fas fa-unlink"></i>
+              </button>
+              <button type="button" class="editor-btn" data-command="h1">
+                H1
+              </button>
+              <button type="button" class="editor-btn" data-command="h2">
+                H2
+              </button>
+              <button type="button" class="editor-btn" data-command="p">
+                P
+              </button>
+            </div>
+            <div
+              id="articleContent"
+              class="editable-div w-full p-3 border border-gray-300 rounded-b-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px] bg-white text-gray-800"
+              contenteditable="true"
+            ></div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-emerald-600 text-white py-3 rounded-md hover:bg-emerald-700 transition duration-300"
+          >
+            लेख पोस्ट करें
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="contactUsModal" class="modal-overlay">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('contactUsModal')">
+          &times;
+        </button>
+        <h3 class="text-2xl font-bold mb-6 text-center">हमसे संपर्क करें</h3>
+        <form id="contactForm">
+          <input
+            type="text"
+            id="contactName"
+            placeholder="आपका नाम"
+            required
+            class="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="email"
+            id="contactEmail"
+            placeholder="आपका ईमेल"
+            required
+            class="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <textarea
+            id="contactMessage"
+            placeholder="आपका संदेश"
+            rows="5"
+            required
+            class="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300"
+          >
+            संदेश भेजें
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

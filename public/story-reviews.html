@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>कहानी समीक्षाएं - गामाकौआ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Base font-family and smooth scroll behavior */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Noto Sans Devanagari", "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        /* New background image: abstract black and white pattern from Unsplash */
+        background-image: url("https://images.unsplash.com/photo-1518495973347-1f4806a6c4b2?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); /* Unsplash B&W abstract image */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-color: #0d1a2f; /* Fallback dark color */
+        color: #e2e8f0; /* Default light text color */
+      }
+
+      /* Header styling with glass morphism effect */
+      header {
+        background: rgba(
+          26,
+          32,
+          44,
+          0.7
+        ); /* Darker, more transparent for glass effect */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #e2e8f0;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      /* Content section with glass morphism effect */
+      .content-overlay {
+        background: rgba(
+          255,
+          255,
+          255,
+          0.75
+        ); /* Light, more transparent white for glass effect */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        color: #374151; /* Darker text inside content overlays */
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .content-overlay:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Gradient text for headings (optional, consistent with main page) */
+      .gradient-text {
+        background: linear-gradient(90deg, #3b82f6, #10b981);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      /* Modal specific styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .modal-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        position: relative;
+        max-width: 90%;
+        width: 500px;
+        transform: scale(0.8);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(245, 245, 245, 0.95) 100%
+        );
+      }
+
+      .modal-overlay.open .modal-content {
+        transform: scale(1);
+      }
+
+      .close-button {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #4a5568;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .close-button:hover {
+        color: #ef4444;
+        transform: rotate(90deg);
+      }
+
+      /* Floating action button (Back to Top) */
+      .floating-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3b82f6, #10b981);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s ease;
+      }
+
+      .floating-btn:hover {
+        transform: scale(1.1) rotate(10deg);
+        box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+      }
+
+      /* Hindi font adjustments */
+      .hindi-text {
+        line-height: 1.8;
+        letter-spacing: 0.5px;
+      }
+    </style>
+  </head>
+  <body class="text-gray-800">
+    <!-- Header Section -->
+    <header class="text-white shadow-lg py-4">
+      <div
+        class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center"
+      >
+        <a
+          href="index.html"
+          class="text-3xl font-bold rounded-md hover:text-gray-300 transition duration-300 flex items-center"
+        >
+          <i class="fas fa-book-open mr-2 text-emerald-400"></i>
+          <span class="gradient-text">गामाकौआ</span>
+        </a>
+        <nav class="mt-4 md:mt-0">
+          <ul
+            class="flex flex-wrap justify-center md:justify-end space-x-4 md:space-x-6 text-base font-medium"
+          >
+            <li>
+              <a
+                href="hindi-literature.html"
+                class="text-white hover:text-emerald-300 transition duration-300 flex items-center"
+              >
+                <i class="fas fa-book mr-2"></i>हिंदी साहित्य</a
+              >
+            </li>
+            <li>
+              <a
+                href="literary-theories.html"
+                class="text-white hover:text-emerald-300 transition duration-300 flex items-center"
+              >
+                <i class="fas fa-scroll mr-2"></i>साहित्यिक सिद्धांत</a
+              >
+            </li>
+            <li>
+              <a
+                href="story-reviews.html"
+                class="text-white hover:text-emerald-300 transition duration-300 flex items-center"
+              >
+                <i class="fas fa-star mr-2"></i>कहानी समीक्षाएं</a
+              >
+            </li>
+            <li>
+              <a
+                href="du-study-material.html"
+                class="text-white hover:text-emerald-300 transition duration-300 flex items-center"
+              >
+                <i class="fas fa-graduation-cap mr-2"></i>डीयू अध्ययन सामग्री</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content Section for Story Reviews -->
+    <section class="py-16 px-4">
+      <div class="container mx-auto content-overlay p-8">
+        <h1
+          class="text-4xl font-bold text-gray-800 mb-8 text-center hindi-text"
+        >
+          कहानी समीक्षाएं
+        </h1>
+        <p class="text-lg text-gray-700 leading-relaxed mb-6 hindi-text">
+          इस अनुभाग में, हम विभिन्न भारतीय और विश्व साहित्य की लघु कथाओं की गहन
+          समीक्षाएं प्रस्तुत करते हैं। हमारी समीक्षाएं कहानी की प्लॉट, चरित्र
+          विकास, विषयों, प्रतीकात्मकता और साहित्यिक तकनीकों का विश्लेषण करती
+          हैं।
+        </p>
+        <p class="text-lg text-gray-700 leading-relaxed mb-6 hindi-text">
+          चाहे आप एक पाठक हों जो अपनी अगली कहानी की तलाश में हैं या एक छात्र जो
+          साहित्यिक विश्लेषण में अंतर्दृष्टि प्राप्त करना चाहता है, हमारे
+          समीक्षाएं आपको कहानी को बेहतर ढंग से समझने और उसकी सराहना करने में मदद
+          करेंगी।
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+          <!-- Example Article Card 1 -->
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-gray-200"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1549491873-1f1c7d2c6c39?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="कमलेश्वर की 'दिल्ली में एक मौत' का विश्लेषण"
+              class="w-full h-48 object-cover rounded-md mb-4"
+              onerror="this.onerror=null;this.src='https://placehold.co/400x200/cccccc/333333?text=Image+Load+Error';"
+            />
+            <h3 class="text-2xl font-semibold text-gray-800 mb-3 hindi-text">
+              कमलेश्वर की 'दिल्ली में एक मौत' का विश्लेषण
+            </h3>
+            <p class="text-gray-700 leading-relaxed mb-4 hindi-text">
+              एक मार्मिक कहानी जो शहरी जीवन की विसंगतियों और मानवीय संबंधों की
+              जटिलताओं को उजागर करती है।
+            </p>
+            <a
+              href="#"
+              class="text-emerald-600 hover:text-emerald-800 font-medium rounded-md flex items-center"
+            >
+              और पढ़ें <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+          <!-- Example Article Card 2 -->
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-gray-200"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="'कफ़न' (प्रेमचंद) - गरीबी और मानवीय नैतिकता"
+              class="w-full h-48 object-cover rounded-md mb-4"
+              onerror="this.onerror=null;this.src='https://placehold.co/400x200/cccccc/333333?text=Image+Load+Error';"
+            />
+            <h3 class="text-2xl font-semibold text-gray-800 mb-3 hindi-text">
+              'कफ़न' (प्रेमचंद) - गरीबी और मानवीय नैतिकता
+            </h3>
+            <p class="text-gray-700 leading-relaxed mb-4 hindi-text">
+              प्रेमचंद की क्लासिक कहानी 'कफ़न' में गरीबी के क्रूर प्रभाव और
+              मानवीय नैतिकता के पतन का अध्ययन।
+            </p>
+            <a
+              href="#"
+              class="text-emerald-600 hover:text-emerald-800 font-medium rounded-md flex items-center"
+            >
+              और पढ़ें <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+          <!-- Example Article Card 3 -->
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-gray-200"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1627914619717-380d0d8f0f3e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="नई पीढ़ी की लघु कथाएं: समीक्षा"
+              class="w-full h-48 object-cover rounded-md mb-4"
+              onerror="this.onerror=null;this.src='https://placehold.co/400x200/cccccc/333333?text=Image+Load+Error';"
+            />
+            <h3 class="text-2xl font-semibold text-gray-800 mb-3 hindi-text">
+              नई पीढ़ी की लघु कथाएं: समीक्षा
+            </h3>
+            <p class="text-gray-700 leading-relaxed mb-4 hindi-text">
+              समकालीन लेखकों की कहानियों में नए विषयों और प्रयोगों की पड़ताल।
+            </p>
+            <a
+              href="#"
+              class="text-emerald-600 hover:text-emerald-800 font-medium rounded-md flex items-center"
+            >
+              और पढ़ें <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+        </div>
+        <div class="text-center mt-12">
+          <a
+            href="index.html"
+            class="bg-emerald-600 text-white hover:bg-emerald-700 py-3 px-8 rounded-full transition duration-300 transform hover:scale-105"
+          >
+            मुख्य पृष्ठ पर वापस जाएँ <i class="fas fa-home ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white py-8 px-4 mt-12">
+      <div class="container mx-auto text-center">
+        <p class="text-sm rounded-md">
+          &copy; 2025 गामाकौआ। सर्वाधिकार सुरक्षित।
+          <span class="text-red-400">&hearts;</span> के साथ डिज़ाइन किया गया।
+        </p>
+        <div class="flex justify-center space-x-6 mt-4">
+          <a
+            href="#"
+            class="text-gray-300 hover:text-white transition duration-300 rounded-md"
+            >गोपनीयता नीति</a
+          >
+          <a
+            href="#"
+            class="text-gray-300 hover:text-white transition duration-300 rounded-md"
+            >सेवा की शर्तें</a
+          >
+          <a
+            href="#"
+            id="contactUsLink"
+            class="text-gray-300 hover:text-white transition duration-300 rounded-md"
+            >हमसे संपर्क करें</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button
+      id="backToTopBtn"
+      class="floating-btn opacity-0 transform scale-0"
+      style="min-width: 50px; min-height: 50px"
+    >
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Contact Us Modal -->
+    <div id="contactModal" class="modal-overlay">
+      <div class="modal-content">
+        <span class="close-button" id="closeModalBtn">&times;</span>
+        <h3 class="text-2xl font-bold text-gray-800 mb-4 hindi-text">
+          हमसे संपर्क करें
+        </h3>
+        <form>
+          <div class="mb-4">
+            <label
+              for="name"
+              class="block text-gray-700 text-sm font-bold mb-2 hindi-text"
+              >आपका नाम:</label
+            >
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-emerald-500 rounded-md"
+              placeholder="अपना नाम दर्ज करें"
+            />
+          </div>
+          <div class="mb-4">
+            <label
+              for="email"
+              class="block text-gray-700 text-sm font-bold mb-2 hindi-text"
+              >आपका ईमेल:</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-emerald-500 rounded-md"
+              placeholder="अपना ईमेल दर्ज करें"
+            />
+          </div>
+          <div class="mb-6">
+            <label
+              for="message"
+              class="block text-gray-700 text-sm font-bold mb-2 hindi-text"
+              >आपका संदेश:</label
+            >
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-emerald-500 rounded-md"
+              placeholder="यहां अपना संदेश लिखें"
+            ></textarea>
+          </div>
+          <div class="flex items-center justify-between">
+            <button
+              type="submit"
+              class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition duration-300 transform hover:scale-105 hindi-text"
+            >
+              संदेश भेजें
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Back to Top button functionality
+        const backToTopBtn = document.getElementById("backToTopBtn");
+
+        const toggleBackToTopButton = () => {
+          if (window.scrollY > 300) {
+            // Show after scrolling 300px
+            backToTopBtn.classList.add("opacity-100", "scale-100");
+            backToTopBtn.classList.remove("opacity-0", "scale-0");
+          } else {
+            backToTopBtn.classList.add("opacity-0", "scale-0");
+            backToTopBtn.classList.remove("opacity-100", "scale-100");
+          }
+        };
+
+        window.addEventListener("scroll", toggleBackToTopButton);
+        backToTopBtn.addEventListener("click", () => {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        });
+
+        // Contact Us Modal functionality
+        const contactUsLink = document.getElementById("contactUsLink");
+        const contactModal = document.getElementById("contactModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+
+        if (contactUsLink) {
+          contactUsLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            contactModal.classList.add("open");
+          });
+        }
+
+        if (closeModalBtn) {
+          closeModalBtn.addEventListener("click", function () {
+            contactModal.classList.remove("open");
+          });
+        }
+
+        // Close modal when clicking outside content
+        if (contactModal) {
+          contactModal.addEventListener("click", function (e) {
+            if (e.target === contactModal) {
+              contactModal.classList.remove("open");
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
