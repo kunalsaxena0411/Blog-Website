@@ -25,7 +25,6 @@
         font-family: "Noto Sans Devanagari", "Inter", sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        /* New background image: abstract black and white pattern from Unsplash */
         background-image: url("https://images.unsplash.com/photo-1518495973347-1f4806a6c4b2?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); /* Unsplash B&W abstract image */
         background-size: cover;
         background-position: center;
@@ -48,6 +47,30 @@
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
+      }
+
+      /* Logo styling */
+      .logo-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #10b981;
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        background: linear-gradient(90deg, #3b82f6, #10b981);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
       }
 
       /* Content section with glass morphism effect */
@@ -168,8 +191,29 @@
         letter-spacing: 0.5px;
       }
 
-      /* Success message styling */
-      .success-message {
+      /* Loader styles */
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3b82f6;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 2s linear infinite;
+        margin: 0 auto;
+        display: none;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Message styling */
+      .info-message {
         position: fixed;
         top: 20px;
         right: 20px;
@@ -185,7 +229,11 @@
         transition: transform 0.3s ease-out;
       }
 
-      .success-message.show {
+      .info-message.error {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+      }
+
+      .info-message.show {
         transform: translateX(0);
       }
 
@@ -279,7 +327,7 @@
         margin-top: 24px;
       }
 
-      /* Blog editor styling */
+      /* Blog editor styling (for edit modal) */
       .editor-toolbar {
         display: flex;
         gap: 8px;
@@ -305,6 +353,11 @@
         color: white;
       }
 
+      /* Custom styling for article detail modal content for better readability */
+      #articleDetailContent {
+        white-space: pre-wrap; /* Preserves whitespace and wraps text */
+        word-break: break-word; /* Breaks long words */
+      }
       /* Responsive adjustments */
       @media (max-width: 768px) {
         .logo-text {
@@ -326,39 +379,13 @@
           gap: 8px;
         }
       }
-
-      /* Custom styling for article detail modal content for better readability */
-      #articleDetailContent {
-        white-space: pre-wrap; /* Preserves whitespace and wraps text */
-        word-break: break-word; /* Breaks long words */
-      }
-      /* Loader styles */
-      .loader {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3b82f6;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 2s linear infinite;
-        margin: 0 auto;
-        display: none;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
     </style>
   </head>
-  <body class="text-gray-800" data-category="hindi-literature">
-    <!-- Success Message Container -->
-    <div id="successMessage" class="success-message">
+  <body class="text-gray-800">
+    <!-- Message Container (for success/error) -->
+    <div id="infoMessage" class="info-message">
       <i class="fas fa-check-circle"></i>
-      <span id="successMessageText"></span>
+      <span id="infoMessageText"></span>
     </div>
 
     <!-- Header Section -->
@@ -366,14 +393,16 @@
       <div
         class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center"
       >
-        <a
-          href="index.html"
-          class="text-3xl font-bold rounded-md hover:text-gray-300 transition duration-300 flex items-center"
-        >
-          <i class="fas fa-book-open mr-2 text-emerald-400"></i>
-          <span class="gradient-text">गामाकौआ</span>
-        </a>
-        <nav class="mt-4 md:mt-0 hidden md:flex">
+        <!-- Logo with link to homepage -->
+        <div class="logo-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png"
+            alt="Gamakauaa Logo"
+            class="logo-img"
+          />
+          <a href="index.html" class="logo-text">गामाकौआ</a>
+        </div>
+        <nav class="mt-4 md:mt-0 flex flex-wrap justify-center md:justify-end items-center space-x-4 md:space-x-6 text-base font-medium">
           <ul
             class="flex flex-wrap justify-center md:justify-end space-x-4 md:space-x-6 text-base font-medium"
           >
@@ -409,50 +438,52 @@
                 <i class="fas fa-graduation-cap mr-2"></i>डीयू अध्ययन सामग्री</a
               >
             </li>
-            <!-- Post Blog Button - Visible only for admins -->
-            <a href="#" id="postContentLink" class="post-blog-btn hidden">
-              <i class="fas fa-plus-circle mr-2"></i>ब्लॉग पोस्ट करें
-            </a>
-
-            <!-- User Profile Dropdown - Visible when logged in -->
-            <div id="userProfileDropdown" class="profile-dropdown hidden">
-              <div class="profile-btn">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                  alt="User Profile"
-                  class="profile-img"
-                />
-                <span
-                  id="userEmailDisplay"
-                  class="text-white font-medium"
-                ></span>
-              </div>
-              <div class="dropdown-content">
-                <a href="#"><i class="fas fa-user mr-2"></i>मेरी प्रोफाइल</a>
-                <a href="#"
-                  ><i class="fas fa-bookmark mr-2"></i>सेव किए गए लेख</a
-                >
-                <a href="#" id="logoutBtn"
-                  ><i class="fas fa-sign-out-alt mr-2"></i>लॉग आउट करें</a
-                >
-              </div>
-            </div>
-
-            <!-- Auth Buttons - Visible when not logged in -->
-            <button
-              id="loginBtn"
-              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300"
-            >
-              लॉग इन
-            </button>
-            <button
-              id="signupBtn"
-              class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300"
-            >
-              साइन अप करें
-            </button>
           </ul>
+
+          <!-- Post Blog Button - Visible only for admins -->
+          <a href="#" id="postContentLink" class="post-blog-btn hidden">
+            <i class="fas fa-plus-circle mr-2"></i>ब्लॉग पोस्ट करें
+          </a>
+
+          <!-- User Profile Dropdown - Visible when logged in -->
+          <div id="userProfileDropdown" class="profile-dropdown hidden">
+            <div class="profile-btn">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                alt="User Profile"
+                class="profile-img"
+              />
+              <span
+                id="userEmailDisplay"
+                class="text-white font-medium"
+              ></span>
+            </div>
+            <div class="dropdown-content">
+              <a href="#"><i class="fas fa-user mr-2"></i>मेरी प्रोफाइल</a>
+              <a href="#"
+                ><i class="fas fa-bookmark mr-2"></i>सेव किए गए लेख</a
+              >
+              <a href="#" id="logoutBtn"
+                ><i class="fas fa-sign-out-alt mr-2"></i>लॉग आउट करें</a
+              >
+            </div>
+          </div>
+
+          <!-- Auth Buttons - Visible when not logged in -->
+          <button
+            id="loginBtn"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300"
+          >
+            लॉग इन
+          </button>
+          <button
+            id="signupBtn"
+            class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300"
+          >
+            साइन अप करें
+          </button>
         </nav>
+        <!-- Mobile Menu Toggle (for the entire header content including new buttons) -->
         <button
           id="mobileMenuBtn"
           class="md:hidden text-white focus:outline-none"
@@ -460,10 +491,11 @@
           <i class="fas fa-bars text-2xl"></i>
         </button>
       </div>
+
       <!-- Mobile Menu -->
       <div
         id="mobileMenu"
-        class="hidden md:hidden py-4 border-t border-gray-700"
+        class="hidden md:hidden py-4 border-t border-gray-700 container mx-auto px-4"
       >
         <div class="flex flex-col space-y-4">
           <a
@@ -619,43 +651,6 @@
             class="text-gray-300 hover:text-white transition duration-300 rounded-md"
             >हमसे संपर्क करें</a
           >
-          <!-- Social Media Links -->
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-gray-300 hover:text-white transition duration-300 rounded-md"
-            aria-label="Facebook"
-          >
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-gray-300 hover:text-white transition duration-300 rounded-md"
-            aria-label="Twitter"
-          >
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-gray-300 hover:text-white transition duration-300 rounded-md"
-            aria-label="Instagram"
-          >
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-gray-300 hover:text-white transition duration-300 rounded-md"
-            aria-label="LinkedIn"
-          >
-            <i class="fab fa-linkedin-in"></i>
-          </a>
         </div>
       </div>
     </footer>
@@ -718,11 +713,11 @@
           >
             लॉग इन
           </button>
-          <div class="text-center mt-4">
+          <div class="text-center text-gray-600 mt-4">
             <a
               href="#"
               id="forgotPasswordLink"
-              class="text-blue-500 hover:text-blue-700 text-sm hindi-text"
+              class="text-blue-500 hover:underline text-sm mt-2 block text-right hindi-text"
               >पासवर्ड भूल गए?</a
             >
           </div>
@@ -779,6 +774,9 @@
           >
             साइन अप करें
           </button>
+          <div class="text-center text-gray-600 mt-4">
+            <!-- No Google signup without Firebase -->
+          </div>
         </form>
       </div>
     </div>
@@ -795,21 +793,22 @@
         <h3
           class="text-2xl font-bold text-gray-800 mb-6 text-center hindi-text"
         >
-          पासवर्ड रीसेट करें
+          पासवर्ड भूल गए
         </h3>
         <p class="text-gray-700 mb-4 text-center hindi-text">
-          अपना ईमेल पता दर्ज करें और हम आपको एक पासवर्ड रीसेट लिंक भेजेंगे।
+          अपना पासवर्ड रीसेट करने के लिए अपना ईमेल दर्ज करें। आपको एक ओटीपी
+          भेजा जाएगा।
         </p>
         <form id="forgotPasswordForm" class="space-y-4">
           <div>
             <label
-              for="forgotPasswordEmail"
+              for="forgotEmail"
               class="block text-gray-700 text-sm font-bold mb-2"
               >ईमेल:</label
             >
             <input
               type="email"
-              id="forgotPasswordEmail"
+              id="forgotEmail"
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="आपका ईमेल"
               required
@@ -819,7 +818,78 @@
             type="submit"
             class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
           >
-            रीसेट लिंक भेजें
+            ओटीपी भेजें
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div
+      id="resetPasswordModal"
+      class="modal-overlay animate__animated animate__fadeIn"
+    >
+      <div class="modal-content animate__animated animate__zoomIn">
+        <span class="close-button" onclick="closeModal('resetPasswordModal')"
+          >&times;</span
+        >
+        <h3
+          class="text-2xl font-bold text-gray-800 mb-6 text-center hindi-text"
+        >
+          पासवर्ड रीसेट करें
+        </h3>
+        <p class="text-gray-700 mb-4 text-center hindi-text">
+          ओटीपी और अपना नया पासवर्ड दर्ज करें।
+        </p>
+        <form id="resetPasswordForm" class="space-y-4">
+          <div>
+            <label
+              for="resetEmail"
+              class="block text-gray-700 text-sm font-bold mb-2"
+              >ईमेल:</label
+            >
+            <input
+              type="email"
+              id="resetEmail"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="आपका ईमेल"
+              readonly
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="resetOtp"
+              class="block text-gray-700 text-sm font-bold mb-2"
+              >ओटीपी:</label
+            >
+            <input
+              type="text"
+              id="resetOtp"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="प्राप्त ओटीपी दर्ज करें"
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="newPassword"
+              class="block text-gray-700 text-sm font-bold mb-2"
+              >नया पासवर्ड:</label
+            >
+            <input
+              type="password"
+              id="newPassword"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="नया पासवर्ड दर्ज करें"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+          >
+            पासवर्ड रीसेट करें
           </button>
         </form>
       </div>
@@ -1065,7 +1135,7 @@
     <!-- Auth Required Modal -->
     <div
       id="authRequiredModal"
-      class="modal-overlay animate__animated animate__fadeIn"
+      class="modal-overlay auth-required-modal animate__animated animate__fadeIn"
     >
       <div class="modal-content animate__animated animate__zoomIn">
         <span class="close-button" onclick="closeModal('authRequiredModal')"
@@ -1097,7 +1167,7 @@
     <!-- Admin Access Required Modal -->
     <div
       id="adminAccessModal"
-      class="modal-overlay animate__animated animate__fadeIn"
+      class="modal-overlay auth-required-modal animate__animated animate__fadeIn"
     >
       <div class="modal-content animate__animated animate__zoomIn">
         <span class="close-button" onclick="closeModal('adminAccessModal')"
@@ -1160,125 +1230,110 @@
       </div>
     </div>
 
-    <!-- Contact Us Modal -->
-    <div
-      id="contactUsModal"
-      class="modal-overlay animate__animated animate__fadeIn"
-    >
-      <div class="modal-content animate__animated animate__zoomIn">
-        <span class="close-button" onclick="closeModal('contactUsModal')"
-          >&times;</span
-        >
-        <h3
-          class="text-2xl font-bold text-gray-800 mb-6 text-center hindi-text"
-        >
+    <!-- Contact Us Modal (already present, reused) -->
+    <div id="contactModal" class="modal-overlay">
+      <div class="modal-content">
+        <span class="close-button" id="closeModalBtn">&times;</span>
+        <h3 class="text-2xl font-bold text-gray-800 mb-4 hindi-text">
           हमसे संपर्क करें
         </h3>
-        <form id="contactForm" class="space-y-4">
-          <div>
+        <form>
+          <div class="mb-4">
             <label
-              for="contactName"
-              class="block text-gray-700 text-sm font-bold mb-2"
-              >नाम:</label
+              for="name"
+              class="block text-gray-700 text-sm font-bold mb-2 hindi-text"
+              >आपका नाम:</label
             >
             <input
               type="text"
-              id="contactName"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="आपका नाम"
-              required
+              id="name"
+              name="name"
+              class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-emerald-500 rounded-md"
+              placeholder="अपना नाम दर्ज करें"
             />
           </div>
-          <div>
+          <div class="mb-4">
             <label
-              for="contactEmail"
-              class="block text-gray-700 text-sm font-bold mb-2"
-              >ईमेल:</label
+              for="email"
+              class="block text-gray-700 text-sm font-bold mb-2 hindi-text"
+              >आपका ईमेल:</label
             >
             <input
               type="email"
-              id="contactEmail"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="आपका ईमेल"
-              required
+              id="email"
+              name="email"
+              class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-emerald-500 rounded-md"
+              placeholder="अपना ईमेल दर्ज करें"
             />
           </div>
-          <div>
+          <div class="mb-6">
             <label
-              for="contactMessage"
-              class="block text-gray-700 text-sm font-bold mb-2"
-              >संदेश:</label
+              for="message"
+              class="block text-gray-700 text-sm font-bold mb-2 hindi-text"
+              >आपका संदेश:</label
             >
             <textarea
-              id="contactMessage"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
-              placeholder="आपका संदेश यहाँ लिखें..."
-              required
+              id="message"
+              name="message"
+              rows="4"
+              class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-emerald-500 rounded-md"
+              placeholder="यहां अपना संदेश लिखें"
             ></textarea>
           </div>
-          <button
-            type="submit"
-            class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
-          >
-            संदेश भेजें
-          </button>
+          <div class="flex items-center justify-between">
+            <button
+              type="submit"
+              class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition duration-300 transform hover:scale-105 hindi-text"
+            >
+              संदेश भेजें
+            </button>
+          </div>
         </form>
       </div>
     </div>
 
     <script>
-      // Base URL for your backend API
-      const BASE_URL = "http://localhost:3000/api"; // Make sure this matches your Node.js server port
+      // API Base URL - IMPORTANT: Change this if your backend is hosted elsewhere
+      const API_BASE_URL = "https://gamakauaa-backend.onrender.com/api";
+      const ARTICLE_CATEGORY = "hindi-literature"; // This page's category
 
-      // Global user state (now relies on localStorage for persistence)
-      let loggedInUser = null; // { email: "user@example.com", isAdmin: false/true }
-      let authToken = null; // JWT token
+      // Function to show messages (success or error)
+      function showMessage(message, isError = false) {
+        const infoMessage = document.getElementById("infoMessage");
+        const infoMessageText = document.getElementById("infoMessageText");
+        infoMessageText.textContent = message;
 
-      // Function to load user state from localStorage on page load
-      function loadUserState() {
-        const storedToken = localStorage.getItem("authToken");
-        const storedUser = localStorage.getItem("loggedInUser");
-        if (storedToken && storedUser) {
-          authToken = storedToken;
-          try {
-            loggedInUser = JSON.parse(storedUser);
-          } catch (e) {
-            console.error("Error parsing stored user data:", e);
-            clearUserState(); // Clear invalid data
-          }
+        // Reset classes
+        infoMessage.classList.remove("show", "error");
+        if (isError) {
+          infoMessage.classList.add("error");
+          infoMessage.querySelector("i").className = "fas fa-times-circle mr-2"; // Error icon
+        } else {
+          infoMessage.querySelector("i").className = "fas fa-check-circle mr-2"; // Success icon
         }
-      }
 
-      // Function to save user state to localStorage after login/signup
-      function saveUserState(token, user) {
-        authToken = token;
-        loggedInUser = user;
-        localStorage.setItem("authToken", token);
-        localStorage.setItem("loggedInUser", JSON.stringify(user));
-      }
-
-      // Function to clear user state from localStorage on logout
-      function clearUserState() {
-        authToken = null;
-        loggedInUser = null;
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("loggedInUser");
-      }
-
-      // Function to show success message pop-up
-      function showSuccessMessage(message) {
-        const successMessage = document.getElementById("successMessage");
-        const successMessageText =
-          document.getElementById("successMessageText");
-        successMessageText.textContent = message;
-        successMessage.classList.add("show");
+        infoMessage.classList.add("show");
         setTimeout(() => {
-          successMessage.classList.remove("show");
+          infoMessage.classList.remove("show");
         }, 3000); // Message disappears after 3 seconds
       }
 
-      // Function to update UI elements based on login status and user role
+      // Function to get current user data from localStorage
+      function getCurrentUser() {
+        const token = localStorage.getItem("token");
+        const userEmail = localStorage.getItem("userEmail");
+        const userRole = localStorage.getItem("userRole");
+        const userId = localStorage.getItem("userId"); // Retrieve userId
+
+        if (token && userEmail && userRole && userId) {
+          return { token, email: userEmail, role: userRole, userId };
+        }
+        return null;
+      }
+
+      // Function to update UI based on login status
       function updateAuthUI() {
+        const loggedInUser = getCurrentUser();
         const loginBtn = document.getElementById("loginBtn");
         const signupBtn = document.getElementById("signupBtn");
         const userProfileDropdown = document.getElementById(
@@ -1296,21 +1351,19 @@
           "mobilePostContentLink"
         );
 
-        // Hide desktop auth buttons and show profile dropdown if logged in
         if (loggedInUser) {
+          // User is signed in
           loginBtn.classList.add("hidden");
           signupBtn.classList.add("hidden");
           userProfileDropdown.classList.remove("hidden");
           userEmailDisplay.textContent = loggedInUser.email;
 
-          // Also update mobile UI
           mobileLoginBtn.classList.add("hidden");
           mobileSignupBtn.classList.add("hidden");
           mobileUserProfile.classList.remove("hidden");
           mobileUserEmailDisplay.textContent = loggedInUser.email;
 
-          // Only admin can see the 'Post Content' link/tab
-          if (loggedInUser.isAdmin) {
+          if (loggedInUser.role === "admin") {
             postContentLink.classList.remove("hidden");
             mobilePostContentLink.classList.remove("hidden");
           } else {
@@ -1318,12 +1371,11 @@
             mobilePostContentLink.classList.add("hidden");
           }
         } else {
-          // User is signed out, show auth buttons and hide profile dropdown
+          // User is signed out
           loginBtn.classList.remove("hidden");
           signupBtn.classList.remove("hidden");
           userProfileDropdown.classList.add("hidden");
 
-          // Also update mobile UI
           mobileLoginBtn.classList.remove("hidden");
           mobileSignupBtn.classList.remove("hidden");
           mobileUserProfile.classList.add("hidden");
@@ -1331,16 +1383,8 @@
           postContentLink.classList.add("hidden");
           mobilePostContentLink.classList.add("hidden");
         }
-        // Load articles relevant to this page's category after auth state is determined
-        loadArticles(document.body.dataset.category); // Pass category if set on body
+        loadArticlesByCategory(); // Re-render articles to show/hide edit/delete buttons
       }
-
-      // Mobile menu toggle
-      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
-      mobileMenuBtn.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-      });
 
       // Generic Modal Functions
       function openModal(modalId) {
@@ -1360,7 +1404,14 @@
         });
       });
 
-      // Event listeners for opening modals
+      // Mobile menu toggle
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+      mobileMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      // Login/Signup Modal Handlers
       document
         .getElementById("loginBtn")
         .addEventListener("click", () => openModal("loginModal"));
@@ -1373,15 +1424,6 @@
       document
         .getElementById("mobileSignupBtn")
         .addEventListener("click", () => openModal("signupModal"));
-
-      // Forgot Password Link in Login Modal
-      document
-        .getElementById("forgotPasswordLink")
-        .addEventListener("click", (e) => {
-          e.preventDefault();
-          closeModal("loginModal"); // Close login modal
-          openModal("forgotPasswordModal"); // Open forgot password modal
-        });
 
       // Auth Required Modal buttons
       document.getElementById("authLoginBtn").addEventListener("click", () => {
@@ -1407,97 +1449,155 @@
           openModal("signupModal");
         });
 
-      // Login Form Submission (Connects to Backend API: POST /api/auth/login)
+      // Forgot Password Link handler
       document
-        .getElementById("loginForm")
-        .addEventListener("submit", async (e) => {
+        .getElementById("forgotPasswordLink")
+        .addEventListener("click", (e) => {
           e.preventDefault();
-          const email = document.getElementById("loginEmail").value;
-          const password = document.getElementById("loginPassword").value;
-
-          try {
-            const response = await fetch(`${BASE_URL}/auth/login`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email, password }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-              saveUserState(data.token, {
-                email: data.email,
-                isAdmin: data.isAdmin,
-              }); // Store isAdmin and email from backend response
-              showSuccessMessage("सफलतापूर्वक लॉग इन किया गया!");
-              closeModal("loginModal");
-              updateAuthUI(); // Update UI to reflect logged-in state
-            } else {
-              showSuccessMessage(data.message || "लॉग इन विफल रहा।");
-            }
-          } catch (error) {
-            console.error("Login error:", error);
-            showSuccessMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।");
-          }
+          closeModal("loginModal");
+          openModal("forgotPasswordModal");
         });
 
-      // Signup Form Submission (Connects to Backend API: POST /api/auth/signup)
-      document
-        .getElementById("signupForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const email = document.getElementById("signupEmail").value;
-          const password = document.getElementById("signupPassword").value;
-
-          try {
-            const response = await fetch(`${BASE_URL}/auth/signup`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email, password }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-              showSuccessMessage(
-                "सफलतापूर्वक साइन अप किया गया! अब आप लॉग इन कर सकते हैं।"
-              );
-              closeModal("signupModal");
-              // Optionally clear signup form, then open login modal
-              document.getElementById("signupEmail").value = "";
-              document.getElementById("signupPassword").value = "";
-              openModal("loginModal"); // Prompt for login after successful signup
-            } else {
-              showSuccessMessage(data.message || "साइन अप विफल रहा।");
-            }
-          } catch (error) {
-            console.error("Signup error:", error);
-            showSuccessMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।");
-          }
-        });
-
-      // Forgot Password Form Submission (Dummy functionality - requires backend implementation)
+      // Forgot Password Form Submission
       document
         .getElementById("forgotPasswordForm")
-        .addEventListener("submit", (e) => {
+        .addEventListener("submit", async (e) => {
           e.preventDefault();
-          const email = document.getElementById("forgotPasswordEmail").value;
-          showSuccessMessage(
-            `यदि '${email}' पंजीकृत है, तो एक पासवर्ड रीसेट लिंक भेजा जाएगा (यह सुविधा अभी विकसित की जा रही है)।`
-          );
-          closeModal("forgotPasswordModal");
-          document.getElementById("forgotPasswordEmail").value = ""; // Clear input
+          const email = document.getElementById("forgotEmail").value;
+
+          try {
+            const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              showMessage(data.message || "OTP आपके ईमेल पर भेजा गया है।");
+              closeModal("forgotPasswordModal");
+              document.getElementById("resetEmail").value = email; // Pre-fill email for reset modal
+              openModal("resetPasswordModal");
+            } else {
+              showMessage(data.message || "पासवर्ड रीसेट अनुरोध विफल रहा।", true);
+            }
+          } catch (error) {
+            console.error("Forgot password error:", error);
+            showMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।", true);
+          }
+        });
+
+      // Reset Password Form Submission
+      document
+        .getElementById("resetPasswordForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("resetEmail").value;
+          const otp = document.getElementById("resetOtp").value;
+          const newPassword = document.getElementById("newPassword").value;
+
+          try {
+            const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, otp, newPassword }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              showMessage(data.message || "पासवर्ड सफलतापूर्वक रीसेट किया गया। अब लॉग इन करें।");
+              closeModal("resetPasswordModal");
+              openModal("loginModal"); // Prompt user to login with new password
+            } else {
+              showMessage(data.message || "पासवर्ड रीसेट विफल रहा।", true);
+            }
+          } catch (error) {
+            console.error("Reset password error:", error);
+            showMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।", true);
+          }
+        });
+
+      // Login Form Submission (Client-side now interacts with backend)
+      document.getElementById("loginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("userEmail", data.user.email);
+            localStorage.setItem("userRole", data.user.role);
+            localStorage.setItem("userId", data.user.id); // Store userId from backend
+            showMessage("सफलतापूर्वक लॉग इन किया गया!");
+            closeModal("loginModal");
+            updateAuthUI();
+          } else {
+            showMessage(data.message || "लॉगिन विफल रहा।", true); // Display error from server
+          }
+        } catch (error) {
+          console.error("Login error:", error);
+          showMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।", true);
+        }
+      });
+
+      // Signup Form Submission (Client-side now interacts with backend)
+      document.getElementById("signupForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("signupEmail").value;
+        const password = document.getElementById("signupPassword").value;
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            showMessage(data.message || "सफलतापूर्वक साइन अप किया गया!");
+            closeModal("signupModal");
+            // Optionally clear signup form, then open login modal
+            document.getElementById("signupEmail").value = "";
+            document.getElementById("signupPassword").value = "";
+            openModal("loginModal"); // Prompt for login after signup
+          } else {
+            showMessage(data.message || "साइन अप विफल रहा।", true); // Display error from server
+          }
+        } catch (error) {
+          console.error("Signup error:", error);
+          showMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।", true);
+          }
         });
 
       // Logout
       function handleLogout() {
-        clearUserState(); // Clear local storage and global state
-        showSuccessMessage("सफलतापूर्वक लॉग आउट किया गया!");
-        updateAuthUI(); // Update UI to reflect logged-out state
+        localStorage.removeItem("token");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("userId"); // Remove userId on logout
+        showMessage("सफलतापूर्वक लॉग आउट किया गया!");
+        updateAuthUI();
       }
       document
         .getElementById("logoutBtn")
@@ -1506,73 +1606,71 @@
         .getElementById("mobileLogoutBtn")
         .addEventListener("click", handleLogout);
 
-      // Rich Text Editor functionality for new article modal
+      // Rich Text Editor functionality for new article (kept for consistency, though this page doesn't post directly)
       function formatDoc(command) {
-        document.getElementById("articleContentEditable").focus();
-        document.execCommand(command, false, null);
+        // This function is for the 'newArticleForm', which is not directly used on this page for posting.
+        // It's included to make the rich text editor logic consistent if this modal is reused or copied.
+        const editableDiv = document.getElementById("articleContentEditable");
+        if (editableDiv) {
+            editableDiv.focus();
+            document.execCommand(command, false, null);
+        }
       }
 
-      // Rich Text Editor functionality for edit article modal
+
+      // Rich Text Editor functionality for edit article
       function formatDocEdit(command) {
         document.getElementById("editArticleContentEditable").focus();
         document.execCommand(command, false, null);
       }
 
-      // Post Content Link handler - Checks for admin access (client-side UI visibility)
+      // Post Content Link handler - Checks for admin access
       document
         .getElementById("postContentLink")
         .addEventListener("click", (e) => {
           e.preventDefault();
+          const loggedInUser = getCurrentUser();
           if (!loggedInUser) {
-            openModal("authRequiredModal"); // Prompt to login/signup
-          } else if (!loggedInUser.isAdmin) {
-            // Check isAdmin from the loggedInUser state
-            openModal("adminAccessModal"); // Inform non-admin users
+            openModal("authRequiredModal");
+          } else if (loggedInUser.role !== "admin") {
+            openModal("adminAccessModal");
           } else {
             openModal("postContentModal");
-            // Clear form fields when opening for a new post
+            // Clear form fields when opening for new post
             document.getElementById("articleTitle").value = "";
             document.getElementById("articleCategory").value = "";
             document.getElementById("articleContentEditable").innerHTML = "";
-            // Pre-select category if on a category page
-            const currentCategory = document.body.dataset.category;
-            if (currentCategory) {
-              document.getElementById("articleCategory").value =
-                currentCategory;
-            }
           }
         });
       document
         .getElementById("mobilePostContentLink")
         .addEventListener("click", (e) => {
           e.preventDefault();
+          const loggedInUser = getCurrentUser();
           if (!loggedInUser) {
             openModal("authRequiredModal");
-          } else if (!loggedInUser.isAdmin) {
+          } else if (loggedInUser.role !== "admin") {
             openModal("adminAccessModal");
           } else {
             openModal("postContentModal");
+            // Clear form fields when opening for new post
             document.getElementById("articleTitle").value = "";
             document.getElementById("articleCategory").value = "";
             document.getElementById("articleContentEditable").innerHTML = "";
-            const currentCategory = document.body.dataset.category;
-            if (currentCategory) {
-              document.getElementById("articleCategory").value =
-                currentCategory;
-            }
           }
         });
 
-      // New Article Form Submission (Connects to Backend API: POST /api/articles)
+      // New Article Form Submission (Now interacts with backend)
       document
         .getElementById("newArticleForm")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
 
-          // Client-side validation for admin access, though backend will also enforce
-          if (!loggedInUser || !loggedInUser.isAdmin) {
-            showSuccessMessage(
-              "लेख पोस्ट करने के लिए आपके पास व्यवस्थापक अधिकार होने चाहिए।"
+          const loggedInUser = getCurrentUser();
+          if (!loggedInUser || loggedInUser.role !== "admin") {
+            showMessage(
+              "लेख पोस्ट करने के लिए आपके पास व्यवस्थापक अधिकार होने चाहिए।",
+              true
             );
             closeModal("postContentModal");
             openModal("adminAccessModal");
@@ -1584,60 +1682,51 @@
           const content = document.getElementById(
             "articleContentEditable"
           ).innerHTML;
-          // author and userId will be set by the backend based on the token
 
           if (!title || !category || !content) {
-            showSuccessMessage("कृपया सभी आवश्यक फ़ील्ड भरें!");
+            showMessage("सभी फ़ील्ड भरें!", true);
             return;
           }
 
           try {
-            console.log("Attempting to post article..."); // Debugging log
-            const response = await fetch(`${BASE_URL}/articles`, {
+            const response = await fetch(`${API_BASE_URL}/articles`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "x-auth-token": authToken, // Send the authentication token
+                Authorization: `Bearer ${loggedInUser.token}`,
               },
-              body: JSON.stringify({ title, category, content }), // Do not send author/userId here, backend sets it
+              body: JSON.stringify({ title, category, content, author: loggedInUser.email }), // Send author as logged-in user's email
             });
 
             const data = await response.json();
-            console.log("Post article response:", response.status, data); // Debugging log
 
             if (response.ok) {
-              showSuccessMessage("लेख सफलतापूर्वक पोस्ट किया गया!");
+              showMessage(data.message || "लेख सफलतापूर्वक पोस्ट किया गया!");
               closeModal("postContentModal");
-              // Re-fetch and re-render articles, ensuring correct category filter is applied
-              loadArticles(document.body.dataset.category);
+              // Check if the posted article belongs to this category before reloading
+              if (category === ARTICLE_CATEGORY) {
+                loadArticlesByCategory(); // Re-render articles for current category
+              }
             } else {
-              showSuccessMessage(
-                data.message || "लेख पोस्ट करने में विफल रहा।"
-              );
+              showMessage(data.message || "लेख पोस्ट करने में त्रुटि।", true);
             }
           } catch (error) {
-            console.error("Create article error:", error);
-            showSuccessMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।");
+            console.error("Error posting article:", error);
+            showMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।", true);
           }
         });
 
-      // Edit Article Form Submission (Connects to Backend API: PUT /api/articles/:id)
+      // Edit Article Form Submission (Now interacts with backend)
       document
         .getElementById("editArticleForm")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
 
-          if (!loggedInUser) {
-            showSuccessMessage("लेख संपादित करने के लिए लॉग इन करें।");
-            closeModal("editArticleModal");
-            openModal("authRequiredModal");
-            return;
-          }
-
-          // Client-side check for admin access for editing
-          if (!loggedInUser.isAdmin) {
-            showSuccessMessage(
-              "आपको इस लेख को संपादित करने की अनुमति नहीं है।"
+          const loggedInUser = getCurrentUser();
+          if (!loggedInUser || loggedInUser.role !== "admin") {
+            showMessage(
+              "लेख संपादित करने के लिए आपके पास व्यवस्थापक अधिकार होने चाहिए।",
+              true
             );
             closeModal("editArticleModal");
             openModal("adminAccessModal");
@@ -1652,69 +1741,51 @@
           ).innerHTML;
 
           if (!title || !category || !content) {
-            showSuccessMessage("कृपया सभी आवश्यक फ़ील्ड भरें!");
+            showMessage("सभी फ़ील्ड भरें!", true);
             return;
           }
 
           try {
-            console.log("Attempting to update article:", articleId); // Debugging log
-            const response = await fetch(`${BASE_URL}/articles/${articleId}`, {
-              method: "PUT",
+            const response = await fetch(`${API_BASE_URL}/articles/${articleId}`, {
+              method: "PUT", // Or PATCH
               headers: {
                 "Content-Type": "application/json",
-                "x-auth-token": authToken, // Send authentication token
+                Authorization: `Bearer ${loggedInUser.token}`,
               },
               body: JSON.stringify({ title, category, content }),
             });
 
             const data = await response.json();
-            console.log("Update article response:", response.status, data); // Debugging log
 
             if (response.ok) {
-              showSuccessMessage("लेख सफलतापूर्वक अपडेट किया गया!");
+              showMessage(data.message || "लेख सफलतापूर्वक अपडेट किया गया!");
               closeModal("editArticleModal");
-              // Re-fetch and re-render articles, ensuring correct category filter is applied
-              loadArticles(document.body.dataset.category);
+              loadArticlesByCategory(); // Re-render articles
             } else {
-              showSuccessMessage(
-                data.message || "लेख अद्यतन करने में विफल रहा।"
-              );
-              // If backend specifically says unauthorized, show admin access modal
-              if (
-                data.message &&
-                (data.message.includes("authorized") ||
-                  data.message.includes("Admin access required"))
-              ) {
-                openModal("adminAccessModal");
-              }
+              showMessage(data.message || "लेख अद्यतन करने में त्रुटि।", true);
             }
           } catch (error) {
-            console.error("Update article error:", error);
-            showSuccessMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।");
+            console.error("Error updating article:", error);
+            showMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।", true);
           }
         });
 
-      // Load and Display Articles (Connects to Backend API: GET /api/articles or /api/articles?category=X)
+      // Load and Display Articles from Backend for this specific category
       const articlesContainer = document.getElementById("articlesContainer");
       const articlesLoader = document.getElementById("articlesLoader");
       const noArticlesMessage = document.getElementById("noArticlesMessage");
-      let articleToDeleteId = null; // To store the ID of the article to be deleted temporarily
+      let articleToDeleteId = null; // To store the ID of the article to be deleted
 
-      async function loadArticles(category = null) {
+      async function loadArticlesByCategory() {
         articlesLoader.style.display = "block"; // Show loader
         noArticlesMessage.classList.add("hidden"); // Hide no articles message
         articlesContainer.innerHTML = ""; // Clear previous articles
 
-        let url = `${BASE_URL}/articles`;
-        if (category) {
-          url += `?category=${category}`; // Add category filter to URL if provided
-        }
-
         try {
-          console.log(`Fetching articles from: ${url}`); // Debugging log
-          const response = await fetch(url);
+          const response = await fetch(
+            `${API_BASE_URL}/articles?category=${ARTICLE_CATEGORY}`
+          );
           const articles = await response.json();
-          console.log("Fetched articles:", articles); // Debugging log
 
           if (articles.length === 0) {
             noArticlesMessage.classList.remove("hidden");
@@ -1722,14 +1793,11 @@
             return;
           }
 
-          // Sort by createdAt (newest first) directly from backend data
-          const sortedArticles = [...articles].sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-          );
+          const loggedInUser = getCurrentUser(); // Get current user for showing edit/delete buttons
 
-          sortedArticles.forEach((article) => {
-            // Use article.createdAt from MongoDB for display
-            const displayDate = new Date(article.createdAt).toLocaleString(
+          articles.forEach((article) => {
+            // Convert timestamp to readable string
+            const timestamp = new Date(article.createdAt).toLocaleString(
               "hi-IN",
               {
                 year: "numeric",
@@ -1740,35 +1808,40 @@
               }
             );
 
-            // Determine if edit/delete buttons should be shown for THIS specific article
-            // Frontend checks: Is user logged in AND is admin (backend requires admin for ALL article CRUD)
-            const canEditOrDelete = loggedInUser && loggedInUser.isAdmin;
+            // Placeholder image URL with onerror for graceful fallback
+            const imageUrl = "https://placehold.co/400x200/cccccc/333333?text=" + encodeURIComponent(article.title.substring(0, 20) + '...');
 
             const articleCard = `
               <div
-                class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-gray-200 cursor-pointer"
+                class="content-overlay p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 cursor-pointer"
                 data-id="${article._id}"
               >
+                <img
+                  src="${imageUrl}"
+                  alt="${article.title}"
+                  class="w-full h-48 object-cover rounded-md mb-4"
+                  onerror="this.onerror=null;this.src='https://placehold.co/400x200/cccccc/333333?text=Image+Load+Error';"
+                />
                 <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">${
                   article.category
                 }</span>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-3 rounded-md hindi-text">${
+                <h3 class="text-xl font-bold mt-2 mb-2 text-gray-800 hindi-text">${
                   article.title
                 }</h3>
-                <p class="text-gray-600 text-sm mb-3">लेखक: ${
-                  article.author
-                }</p>
-                <p class="text-gray-500 text-xs mb-4">प्रकाशित: ${displayDate}</p>
-                <div class="text-gray-700 leading-relaxed truncate-3-lines hindi-text">
-                  ${article.content}
-                </div>
+                <p class="text-gray-600 text-sm mb-3">लेखक: ${article.author}</p>
+                <p class="text-gray-500 text-xs mb-4">प्रकाशित: ${timestamp}</p>
+                <p class="text-gray-700 leading-relaxed truncate-3-lines hindi-text">
+                  ${article.content
+                    .replace(/<[^>]*>?/gm, "")
+                    .substring(0, 150)}... <!-- Strip HTML and truncate -->
+                </p>
                 <button class="mt-4 text-emerald-600 hover:underline read-more-btn" data-id="${
                   article._id
                 }">
                   और पढ़ें <i class="fas fa-arrow-right ml-1"></i>
                 </button>
                 ${
-                  canEditOrDelete // Only show edit/delete section if authorized (admin only)
+                  loggedInUser && loggedInUser.role === "admin"
                     ? `
                   <div class="mt-4 flex gap-2">
                     <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-sm edit-article-btn" data-id="${article._id}">
@@ -1786,64 +1859,63 @@
             articlesContainer.insertAdjacentHTML("beforeend", articleCard);
           });
 
-          // Add event listeners to newly created elements
+          // Add event listeners to newly created read-more, edit, and delete buttons
           articlesContainer
-            .querySelectorAll(".read-more-btn")
-            .forEach((button) => {
-              button.addEventListener("click", (e) => {
-                const articleId = e.currentTarget.dataset.id;
-                openArticleDetailModal(articleId); // Fetch and display full article
+            .querySelectorAll(".content-overlay")
+            .forEach((card) => {
+              card.addEventListener("click", async (e) => {
+                // Only trigger detail modal if not clicking edit/delete buttons
+                if (
+                  !e.target.closest(".edit-article-btn") &&
+                  !e.target.closest(".delete-article-btn")
+                ) {
+                  const articleId = e.currentTarget.dataset.id;
+                  try {
+                    const response = await fetch(`${API_BASE_URL}/articles/${articleId}`);
+                    const article = await response.json();
+                    if (response.ok) {
+                      openArticleDetailModal(article);
+                    } else {
+                      showMessage(article.message || "लेख लोड करने में त्रुटि।", true);
+                    }
+                  } catch (error) {
+                    console.error("Error fetching single article:", error);
+                    showMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।", true);
+                  }
+                }
               });
             });
 
           articlesContainer
             .querySelectorAll(".edit-article-btn")
             .forEach((button) => {
-              button.addEventListener("click", async (e) => {
-                e.stopPropagation(); // Stop event from bubbling up to the card click
-                const articleId = e.currentTarget.dataset.id;
-
-                if (!loggedInUser) {
+              button.addEventListener("click", (e) => {
+                e.stopPropagation(); // Prevent card click event
+                const loggedInUser = getCurrentUser();
+                if (loggedInUser && loggedInUser.role === "admin") {
+                  const articleId = e.currentTarget.dataset.id;
+                  // Fetch article data to populate the edit form
+                  fetch(`${API_BASE_URL}/articles/${articleId}`)
+                    .then(res => res.json())
+                    .then(article => {
+                      if (article) {
+                        document.getElementById("editArticleId").value = article._id;
+                        document.getElementById("editArticleTitle").value = article.title;
+                        document.getElementById("editArticleCategory").value = article.category;
+                        document.getElementById("editArticleContentEditable").innerHTML = article.content;
+                        openModal("editArticleModal");
+                      } else {
+                        showMessage("लेख नहीं मिला।", true);
+                      }
+                    })
+                    .catch(error => {
+                      console.error("Error fetching article for edit:", error);
+                      showMessage("लेख डेटा प्राप्त करने में त्रुटि।", true);
+                    });
+                } else if (!loggedInUser) {
                   openModal("authRequiredModal");
-                  return;
-                }
-                // Client-side check for admin access for editing
-                if (!loggedInUser.isAdmin) {
-                  showSuccessMessage(
-                    "आपको इस लेख को संपादित करने की अनुमति नहीं है।"
-                  );
+                } else {
                   openModal("adminAccessModal");
-                  return;
-                }
-
-                try {
-                  // Fetch the article details to populate the form
-                  console.log("Fetching article for edit:", articleId); // Debugging log
-                  const response = await fetch(
-                    `${BASE_URL}/articles/${articleId}`
-                  );
-                  const article = await response.json();
-                  console.log("Article fetched for edit:", article); // Debugging log
-
-                  if (response.ok) {
-                    document.getElementById("editArticleId").value =
-                      article._id;
-                    document.getElementById("editArticleTitle").value =
-                      article.title;
-                    document.getElementById("editArticleCategory").value =
-                      article.category;
-                    document.getElementById(
-                      "editArticleContentEditable"
-                    ).innerHTML = article.content;
-                    openModal("editArticleModal");
-                  } else {
-                    showSuccessMessage(
-                      article.message || "लेख लोड करने में विफल रहा।"
-                    );
-                  }
-                } catch (error) {
-                  console.error("Error fetching article for edit:", error);
-                  showSuccessMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।");
                 }
               });
             });
@@ -1851,174 +1923,97 @@
           articlesContainer
             .querySelectorAll(".delete-article-btn")
             .forEach((button) => {
-              button.addEventListener("click", async (e) => {
+              button.addEventListener("click", (e) => {
                 e.stopPropagation(); // Prevent card click event
-                const articleId = e.currentTarget.dataset.id;
-
-                if (!loggedInUser) {
-                  openModal("authRequiredModal");
-                  return;
-                }
-                // Client-side check for admin access for deleting
-                if (!loggedInUser.isAdmin) {
-                  showSuccessMessage("आपको इस लेख को हटाने की अनुमति नहीं है।");
-                  openModal("adminAccessModal");
-                  return;
-                }
-
-                try {
-                  console.log("Preparing to delete article:", articleId); // Debugging log
-                  articleToDeleteId = articleId; // Store ID for confirmation
+                const loggedInUser = getCurrentUser();
+                if (loggedInUser && loggedInUser.role === "admin") {
+                  articleToDeleteId = e.currentTarget.dataset.id; // Store ID for confirmation
                   openModal("confirmationModal");
-                } catch (error) {
-                  console.error("Error preparing article for delete:", error);
-                  showSuccessMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।");
+                } else if (!loggedInUser) {
+                  openModal("authRequiredModal");
+                } else {
+                  openModal("adminAccessModal");
                 }
               });
             });
-
-          articlesLoader.style.display = "none"; // Hide loader
         } catch (error) {
-          console.error("Error fetching articles:", error);
-          noArticlesMessage.classList.remove("hidden");
-          articlesLoader.style.display = "none";
-          showSuccessMessage("लेख लोड करने में विफल रहा।");
+          console.error("Error loading articles:", error);
+          showMessage("लेख लोड करने में त्रुटि या सर्वर अनुपलब्ध।", true);
+          noArticlesMessage.classList.remove("hidden"); // Show message if API fails
+        } finally {
+          articlesLoader.style.display = "none"; // Hide loader regardless of success/failure
         }
       }
 
-      // Handle delete confirmation (Connects to Backend API: DELETE /api/articles/:id)
+      // Handle delete confirmation (Now interacts with backend)
       document
         .getElementById("confirmDeleteBtn")
         .addEventListener("click", async () => {
-          if (!loggedInUser) {
-            showSuccessMessage("लेख हटाने के लिए लॉग इन करें।");
-            closeModal("confirmationModal");
-            openModal("authRequiredModal");
-            return;
-          }
-
-          // Client-side check for admin access for deleting
-          if (!loggedInUser.isAdmin) {
-            showSuccessMessage("आपको इस लेख को हटाने की अनुमति नहीं है।");
-            closeModal("confirmationModal");
-            openModal("adminAccessModal");
-            return;
-          }
-
-          if (articleToDeleteId) {
+          const loggedInUser = getCurrentUser();
+          if (
+            articleToDeleteId &&
+            loggedInUser &&
+            loggedInUser.role === "admin"
+          ) {
             try {
-              console.log("Attempting to delete article:", articleToDeleteId); // Debugging log
-              const response = await fetch(
-                `${BASE_URL}/articles/${articleToDeleteId}`,
-                {
-                  method: "DELETE",
-                  headers: {
-                    "x-auth-token": authToken, // Send authentication token
-                  },
-                }
-              );
+              const response = await fetch(`${API_BASE_URL}/articles/${articleToDeleteId}`, {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${loggedInUser.token}`,
+                },
+              });
 
               const data = await response.json();
-              console.log("Delete article response:", response.status, data); // Debugging log
 
               if (response.ok) {
-                showSuccessMessage("लेख सफलतापूर्वक हटाया गया!");
+                showMessage(data.message || "लेख सफलतापूर्वक हटाया गया!");
                 closeModal("confirmationModal");
-                // Re-fetch and re-render articles, ensuring correct category filter is applied
-                loadArticles(document.body.dataset.category);
+                loadArticlesByCategory(); // Re-render articles
                 articleToDeleteId = null; // Clear stored ID
               } else {
-                showSuccessMessage(data.message || "लेख हटाने में विफल रहा।");
-                if (
-                  data.message &&
-                  (data.message.includes("authorized") ||
-                    data.message.includes("Admin access required"))
-                ) {
-                  openModal("adminAccessModal"); // If backend specifically says unauthorized
-                }
+                showMessage(data.message || "लेख हटाने में त्रुटि।", true);
               }
             } catch (error) {
-              console.error("Delete article error:", error);
-              showSuccessMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।");
+              console.error("Error deleting article:", error);
+              showMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।", true);
             }
           } else {
-            showSuccessMessage("हटाने के लिए कोई लेख चयनित नहीं है।");
+            showMessage("लेख हटाने में त्रुटि या पहुँच नहीं है।", true);
             closeModal("confirmationModal");
           }
         });
 
-      // Open Article Detail Modal and populate content (Connects to Backend API: GET /api/articles/:id)
-      async function openArticleDetailModal(articleId) {
-        try {
-          console.log("Fetching article detail for:", articleId); // Debugging log
-          const response = await fetch(`${BASE_URL}/articles/${articleId}`); // Public endpoint
-          const article = await response.json();
-          console.log("Article detail fetched:", article); // Debugging log
-
-          if (response.ok) {
-            document.getElementById("articleDetailTitle").textContent =
-              article.title;
-            document.getElementById("articleDetailCategory").textContent =
-              article.category;
-            document.getElementById("articleDetailAuthor").textContent =
-              article.author; // Use author from backend (which is postedBy email)
-            const timestamp = new Date(article.createdAt).toLocaleString(
-              "hi-IN",
-              {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              }
-            );
-            document.getElementById(
-              "articleDetailTimestamp"
-            ).textContent = `प्रकाशित: ${timestamp}`;
-            document.getElementById("articleDetailContent").innerHTML =
-              article.content;
-            openModal("articleDetailModal");
-          } else {
-            showSuccessMessage(
-              article.message || "लेख विवरण लोड करने में विफल रहा।"
-            );
-          }
-        } catch (error) {
-          console.error("Error fetching article detail:", error);
-          showSuccessMessage("नेटवर्क त्रुटि या सर्वर अनुपलब्ध।");
-        }
+      // Open Article Detail Modal and populate content
+      function openArticleDetailModal(article) {
+        document.getElementById("articleDetailTitle").textContent =
+          article.title;
+        document.getElementById("articleDetailCategory").textContent =
+          article.category;
+        document.getElementById("articleDetailAuthor").textContent =
+          article.author;
+        // Format timestamp
+        const timestamp = new Date(article.createdAt).toLocaleString("hi-IN", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        document.getElementById(
+          "articleDetailTimestamp"
+        ).textContent = `प्रकाशित: ${timestamp}`;
+        document.getElementById("articleDetailContent").innerHTML =
+          article.content; // Use innerHTML for rich text
+        openModal("articleDetailModal");
       }
 
-      // Contact Us Modal
-      document
-        .getElementById("contactUsLink")
-        .addEventListener("click", (e) => {
-          e.preventDefault();
-          openModal("contactUsModal");
-        });
-
-      document.getElementById("contactForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const name = document.getElementById("contactName").value;
-        const email = document.getElementById("contactEmail").value;
-        const message = document.getElementById("contactMessage").value;
-        console.log(
-          `Contact Form Submission: Name - ${name}, Email - ${email}, Message - ${message}`
-        );
-        showSuccessMessage("आपका संदेश सफलतापूर्वक भेजा गया!");
-        closeModal("contactUsModal");
-        document.getElementById("contactForm").reset(); // Clear form
-      });
-
       document.addEventListener("DOMContentLoaded", function () {
-        // Load user state from localStorage and update UI, then load articles
-        loadUserState(); // Load user state (token, loggedInUser) from local storage
-        updateAuthUI(); // Update UI elements based on initial authentication state
-
         // Back to Top button functionality
         const backToTopBtn = document.getElementById("backToTopBtn");
+
         const toggleBackToTopButton = () => {
           if (window.scrollY > 300) {
+            // Show after scrolling 300px
             backToTopBtn.classList.add("opacity-100", "scale-100");
             backToTopBtn.classList.remove("opacity-0", "scale-0");
           } else {
@@ -2034,6 +2029,36 @@
             behavior: "smooth",
           });
         });
+
+        // Contact Us Modal functionality
+        const contactUsLink = document.getElementById("contactUsLink");
+        const contactModal = document.getElementById("contactModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+
+        if (contactUsLink) {
+          contactUsLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            contactModal.classList.add("open");
+          });
+        }
+
+        if (closeModalBtn) {
+          closeModalBtn.addEventListener("click", function () {
+            contactModal.classList.remove("open");
+          });
+        }
+
+        // Close modal when clicking outside content
+        if (contactModal) {
+          contactModal.addEventListener("click", function (e) {
+            if (e.target === contactModal) {
+              contactModal.classList.remove("open");
+            }
+          });
+        }
+
+        updateAuthUI(); // Initialize UI based on initial loggedInUser state (null)
+        // loadArticlesByCategory is called inside updateAuthUI()
       });
     </script>
   </body>
